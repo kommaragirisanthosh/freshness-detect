@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vegetable Freshness Detector</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1><i class="fas fa-carrot"></i> Vegetable Freshness Detector</h1>
+            <p>Upload an image of your vegetable to check its freshness level</p>
+        </header>
+
+        <div class="upload-area" id="uploadArea">
+            <div class="upload-icon">
+                <i class="fas fa-cloud-upload-alt"></i>
+            </div>
+            <p>Drag & Drop your vegetable image here</p>
+            <p>or</p>
+            <button class="btn" id="browseBtn">Browse Files</button>
+            <input type="file" id="fileInput" accept="image/*" style="display: none;">
+        </div>
+
+        <div class="result-container" id="resultContainer" style="display: none;">
+            <div class="image-preview">
+                <img id="previewImage" src="" alt="Vegetable Preview">
+            </div>
+            <div class="result-details">
+                <h2>Freshness Analysis</h2>
+                <div class="result-item">
+                    <span class="label">Status:</span>
+                    <span class="value" id="freshnessStatus">-</span>
+                </div>
+                <div class="result-item">
+                    <span class="label">Freshness Score:</span>
+                    <span class="value" id="freshnessScore">-</span>
+                </div>
+                <div class="result-item">
+                    <span class="label">Estimated Shelf Life:</span>
+                    <span class="value" id="shelfLife">-</span>
+                </div>
+                <div class="result-item">
+                    <span class="label">Use By:</span>
+                    <span class="value" id="expirationDate">-</span>
+                </div>
+                <div class="result-item">
+                    <span class="label">Color Saturation:</span>
+                    <span class="value" id="colorSaturation">-</span>
+                </div>
+                <div class="result-item">
+                    <span class="label">Brightness:</span>
+                    <span class="value" id="brightness">-</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="tips-section">
+            <h2><i class="fas fa-lightbulb"></i> Freshness Tips</h2>
+            <div class="tips-grid">
+                <div class="tip-card">
+                    <i class="fas fa-leaf"></i>
+                    <h3>Leafy Greens</h3>
+                    <p>Store in airtight containers with a paper towel to absorb moisture.</p>
+                </div>
+                <div class="tip-card">
+                    <i class="fas fa-apple-alt"></i>
+                    <h3>Root Vegetables</h3>
+                    <p>Keep in a cool, dark place with good ventilation.</p>
+                </div>
+                <div class="tip-card">
+                    <i class="fas fa-pepper-hot"></i>
+                    <h3>Nightshades</h3>
+                    <p>Store at room temperature away from direct sunlight.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <p> Vegetable Freshness Detector | Made with <i class="fas fa-heart"></i> for healthy eating</p>
+    </footer>
+
+    <script>
+        const uploadArea = document.getElementById('uploadArea');
+        const fileInput = document.getElementById('fileInput');
+        const browseBtn = document.getElementById('browseBtn');
+        const resultContainer = document.getElementById('resultContainer');
+        const previewImage = document.getElementById('previewImage');
+
+        // Handle drag and drop
+        uploadArea.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            uploadArea.classList.add('dragover');
+        });
+
+        uploadArea.addEventListener('dragleave', () => {
+            uploadArea.classList.remove('dragover');
+        });
+
+        uploadArea.addEventListener('drop', (e) => {
+            e.preventDefault();
+            uploadArea.classList.remove('dragover');
+            
+            if (e.dataTransfer.files.length) {
+                fileInput.files = e.dataTransfer.files;
+                handleFileUpload(e.dataTransfer.files[0]);
+            }
+        });
+
+        // Handle file selection
+        browseBtn.addEventListener('click', () => {
+            fileInput.click();
+        });
+
+        fileInput.addEventListener('change', () => {
+            if (fileInput.files.length) {
+                handleFileUpload(fileInput.files[0]);
+            }
+        });
+
+        // Process the uploaded file
+        function handleFileUpload(file) {
+            if (!file.type.match('image.*')) {
+                alert('Please upload an image file.');
+                return;
+            }
+
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                previewImage.src = e.target.result;
+                
+                // Show loading state
+                resultContainer.style.display = 'block';
+                document.querySelectorAll('.value').forEach(el => {
+                    el.textContent = 'Analyzing...';
+                });
+
+                // Upload to server for analysis
+                const formData = new FormData();
+                formData.append('file', file);
+
+                fetch('/upload', {
+                    method: 'POST',
+                    body: formData
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.error) {
+                        alert(data.error);
+                        return;
+                    }
+
+                    // Update results
+                    document.getElementById('freshnessStatus').textContent = data.freshness;
+                    document.getElementById('freshnessScore').textContent = data.score;
+                    document.getElementById('shelfLife').textContent = data.shelf_life;
+                    document.getElementById('expirationDate').textContent = data.expiration_date;
+                    document.getElementById('colorSaturation').textContent = data.color_saturation;
+                    document.getElementById('brightness').textContent = data.brightness;
+
+                    // Update freshness status color
+                    const statusElement = document.getElementById('freshnessStatus');
+                    if (data.freshness === "Very Fresh") {
+                        statusElement.style.color = '#2ecc71';
+                    } else if (data.freshness === "Fresh") {
+                        statusElement.style.color = '#27ae60';
+                    } else if (data.freshness === "Moderate") {
+                        statusElement.style.color = '#f39c12';
+                    } else {
+                        statusElement.style.color = '#e74c3c';
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert('An error occurred while analyzing the image.');
+                });
+            };
+            reader.readAsDataURL(file);
+        }
+    </script>
+</body>
+</html>

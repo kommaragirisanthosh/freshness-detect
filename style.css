@@ -1,0 +1,245 @@
+/* General Styles */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Poppins', sans-serif;
+}
+
+body {
+    margin: 0;
+    padding: 0;
+    font-family: 'Poppins', sans-serif;
+    color: #333;
+    line-height: 1.6;
+    
+    /* Background image properties */
+    background-image: url('../images/vegetable-bg.jpg');
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
+    background-repeat: no-repeat;
+    
+    /* Semi-transparent overlay to improve text readability */
+    background-color: rgba(241, 248, 233, 0.8);
+    background-blend-mode: overlay;
+    
+    min-height: 100vh;
+}
+body {
+    background-color: #f1f8e9;
+    background-image: url('https://images.unsplash.com/photo-1542838132-92c53300491e?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80');
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
+    background-blend-mode: overlay;
+    color: #333;
+    line-height: 1.6;
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+    background-color: rgba(255, 255, 255, 0.9);
+    border-radius: 15px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    margin-top: 30px;
+    margin-bottom: 30px;
+}
+
+header {
+    text-align: center;
+    padding: 30px 0;
+    color: #2e7d32;
+}
+
+header h1 {
+    font-size: 2.5rem;
+    margin-bottom: 10px;
+}
+
+header p {
+    font-size: 1.1rem;
+    color: #555;
+}
+
+/* Upload Area */
+.upload-area {
+    border: 3px dashed #81c784;
+    border-radius: 10px;
+    padding: 40px;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    margin: 20px 0;
+    background-color: rgba(129, 199, 132, 0.1);
+}
+
+.upload-area:hover {
+    background-color: rgba(129, 199, 132, 0.2);
+}
+
+.upload-area.dragover {
+    background-color: rgba(129, 199, 132, 0.3);
+    border-color: #4caf50;
+}
+
+.upload-icon {
+    font-size: 50px;
+    color: #4caf50;
+    margin-bottom: 20px;
+}
+
+.upload-area p {
+    margin: 10px 0;
+    color: #555;
+}
+
+.btn {
+    background-color: #4caf50;
+    color: white;
+    border: none;
+    padding: 12px 25px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 1rem;
+    transition: background-color 0.3s;
+}
+
+.btn:hover {
+    background-color: #388e3c;
+}
+
+/* Result Container */
+.result-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 30px;
+    margin: 30px 0;
+    padding: 20px;
+    background-color: rgba(255, 255, 255, 0.8);
+    border-radius: 10px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+}
+
+.image-preview {
+    flex: 1;
+    min-width: 300px;
+}
+
+.image-preview img {
+    width: 100%;
+    border-radius: 10px;
+    object-fit: cover;
+    max-height: 400px;
+}
+
+.result-details {
+    flex: 1;
+    min-width: 300px;
+}
+
+.result-details h2 {
+    color: #2e7d32;
+    margin-bottom: 20px;
+    font-size: 1.8rem;
+}
+
+.result-item {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 15px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid #e0e0e0;
+}
+
+.label {
+    font-weight: 600;
+    color: #555;
+}
+
+.value {
+    font-weight: 400;
+    color: #333;
+}
+
+/* Tips Section */
+.tips-section {
+    margin-top: 50px;
+    padding: 20px;
+}
+
+.tips-section h2 {
+    text-align: center;
+    color: #2e7d32;
+    margin-bottom: 30px;
+    font-size: 1.8rem;
+}
+
+.tips-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 20px;
+}
+
+.tip-card {
+    background-color: white;
+    padding: 25px;
+    border-radius: 10px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+    text-align: center;
+    transition: transform 0.3s;
+}
+
+.tip-card:hover {
+    transform: translateY(-5px);
+}
+
+.tip-card i {
+    font-size: 2.5rem;
+    color: #4caf50;
+    margin-bottom: 15px;
+}
+
+.tip-card h3 {
+    color: #2e7d32;
+    margin-bottom: 10px;
+}
+
+.tip-card p {
+    color: #666;
+}
+
+/* Footer */
+footer {
+    text-align: center;
+    padding: 20px;
+    color: white;
+    background-color: rgba(46, 125, 50, 0.9);
+    margin-top: 30px;
+}
+
+footer p {
+    margin: 0;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .container {
+        padding: 15px;
+        margin: 15px;
+    }
+    
+    header h1 {
+        font-size: 2rem;
+    }
+    
+    .upload-area {
+        padding: 30px 15px;
+    }
+    
+    .result-container {
+        flex-direction: column;
+    }
+}
